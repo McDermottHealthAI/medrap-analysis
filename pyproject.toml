@@ -3,7 +3,7 @@ requires = ["setuptools>=80.9.0", "setuptools-scm>=9.2", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "package_name"
+name = "medrap-analysis"
 dynamic = ["version"] # Makes setuptools-scm manage the version
 authors = [
   {name="Matthew McDermott", email="mattmcdermott8@gmail.com"}, # Replace with your team's details
@@ -17,22 +17,29 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-] # Add your runtime dependencies here
+  "medrap @ git+https://github.com/McDermottHealthAI/MedRAP.git",
+  "numpy>=1.26",
+  "polars>=0.20",
+  "scikit-learn>=1.5.0",
+]
 
 [dependency-groups]
 dev = [
   "pre-commit<4", "ruff", "pytest", "pytest-cov", "pretty-print-directory",
-  # shfmt-py bundles the `shfmt` binary used by the mdformat-shfmt pre-commit
-  # hook. Pinning it here (in addition to the pre-commit hook's
-  # additional_dependencies) gives a single source of truth and keeps local
-  # `uv run mdformat ...` runs consistent with CI pre-commit runs.
   "shfmt-py==3.12.0.2",
-] # Add your development (lint, test) dependencies here
-docs = [] # Add your documentation dependencies here (I recommend mkdocs-material)
+]
+docs = []
+llm_judge = ["openai>=1.0.0", "tiktoken>=0.7.0", "xlsxwriter>=3.2", "openpyxl>=3.1"]
+viz = ["matplotlib>=3.8", "umap-learn>=0.5"]
 
 [tool.setuptools_scm] # Required for setuptools-scm to work, even if empty
 
-[project.optional-dependencies] # Add any optional dependencies here, installable via `pip install .[extra]`
+[tool.uv]
+default-groups = ["dev", "llm_judge", "viz"]
+
+[project.optional-dependencies]
+llm_judge = ["openai>=1.0.0", "tiktoken>=0.7.0", "xlsxwriter>=3.2", "openpyxl>=3.1"]
+viz = ["matplotlib>=3.8", "umap-learn>=0.5"]
 
 [project.scripts] # Add any console scripts here
 
@@ -50,8 +57,8 @@ markers = [] # Add any custom pytest markers here
 doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 
 [project.urls]
-Homepage = "https://github.com/McDermottHealthAI/REPO_NAME" # Replace with your repo URL
-Issues = "https://github.com/McDermottHealthAI/REPO_NAME/issues" # Replace with your repo URL
+Homepage = "https://github.com/McDermottHealthAI/medrap-analysis"
+Issues = "https://github.com/McDermottHealthAI/medrap-analysis/issues"
 
 [tool.ruff] # Ruff configuration for linting and formatting
 target-version = "py312"
@@ -86,4 +93,4 @@ extend-ignore-names = ["*MEDS*", "*NRT*", "D", "L"] # Allow common abbreviations
 convention = "google"
 
 [tool.ruff.lint.isort]
-known-first-party = ["package_name"]  # Replace with your actual package name
+known-first-party = ["medrap_analysis"]
