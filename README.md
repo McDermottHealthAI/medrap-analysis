@@ -1,20 +1,32 @@
-# MHAL-template
+# medrap-analysis
 
 [![Python 3.12+](https://img.shields.io/badge/-Python_3.12+-blue?logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3100/)
-[![PyPI - Version](https://img.shields.io/pypi/v/package_name)](https://pypi.org/project/package_name/)
-[![Documentation Status](https://readthedocs.org/projects/package_name/badge/?version=latest)](https://package_name.readthedocs.io/en/latest/?badge=latest)
-[![Tests](https://github.com/McDermottHealthAI/MHAL-template/actions/workflows/tests.yaml/badge.svg)](https://github.com/McDermottHealthAI/MHAL-template/actions/workflows/tests.yaml)
-[![Test Coverage](https://codecov.io/github/McDermottHealthAI/MHAL-template/graph/badge.svg?token=BV119L5JQJ)](https://codecov.io/github/McDermottHealthAI/MHAL-template)
-[![Code Quality](https://github.com/McDermottHealthAI/MHAL-template/actions/workflows/code-quality-main.yaml/badge.svg)](https://github.com/McDermottHealthAI/MHAL-template/actions/workflows/code-quality-main.yaml)
-[![Contributors](https://img.shields.io/github/contributors/McDermottHealthAI/MHAL-template.svg)](https://github.com/McDermottHealthAI/package_name/graphs/contributors)
-[![Pull Requests](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/McDermottHealthAI/package_name/pulls)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?labelColor=gray)](https://github.com/McDermottHealthAI/package_name#license)
+[![Tests](https://github.com/McDermottHealthAI/medrap-analysis/actions/workflows/tests.yaml/badge.svg)](https://github.com/McDermottHealthAI/medrap-analysis/actions/workflows/tests.yaml)
+[![Test Coverage](https://codecov.io/github/McDermottHealthAI/medrap-analysis/graph/badge.svg)](https://codecov.io/github/McDermottHealthAI/medrap-analysis)
+[![Code Quality](https://github.com/McDermottHealthAI/medrap-analysis/actions/workflows/code-quality-main.yaml/badge.svg)](https://github.com/McDermottHealthAI/medrap-analysis/actions/workflows/code-quality-main.yaml)
+[![Contributors](https://img.shields.io/github/contributors/McDermottHealthAI/medrap-analysis.svg)](https://github.com/McDermottHealthAI/medrap-analysis/graphs/contributors)
+[![Pull Requests](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/McDermottHealthAI/medrap-analysis/pulls)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?labelColor=gray)](https://github.com/McDermottHealthAI/medrap-analysis#license)
 
-A minimal python package/project template for McDermott Health AI Lab research projects.
+Post-hoc LLM judge, demographic analysis, and comorbidity scoring for
+[MedRAP](https://github.com/McDermottHealthAI/MedRAP) pipeline outputs.
 
-## Quick Setup
+## Modules
 
-This template contains the following files:
+- **`llm_judge`** — LLM-based pairwise comparison judge for evaluating retrieval quality; supports
+    OpenAI-compatible endpoints and a `FakeJudge` for offline testing.
+- **`demographic_analysis`** — Patient demographic breakdown, keyword/topic analysis, and
+    heatmap visualization.
+- **`comorbidity`** — Charlson Comorbidity Index scoring from ICD code lookups.
+
+## Installation
+
+```bash
+# Core (LLM judge + viz extras recommended)
+pip install "medrap-analysis[llm_judge,viz] @ git+https://github.com/McDermottHealthAI/medrap-analysis.git"
+```
+
+## Repository Structure
 
 ```python
 >>> print_directory(
@@ -46,34 +58,37 @@ This template contains the following files:
 ├── README.md
 ├── conftest.py
 ├── pyproject.toml
+├── scripts
+│   ├── aggregate_llm_judge_rank_sweep.py
+│   ├── aggregate_llm_judge_rank_sweep_slurm.sh
+│   ├── extract_and_visualize.py
+│   ├── plot_llm_judge_winrates.py
+│   ├── run_demographic_heatmap.py
+│   ├── run_extraction_pipeline.py
+│   ├── run_llm_judge.py
+│   ├── run_llm_judge_rank_sweep_array_slurm.sh
+│   ├── run_llm_judge_rank_sweep_slurm.sh
+│   ├── submit_llm_judge_rank_sweep.sh
+│   └── summarize_sweep.py
 ├── src
-│   └── package_name
-│       └── __init__.py
+│   └── medrap_analysis
+│       ├── __init__.py
+│       ├── comorbidity.py
+│       ├── demographic_analysis.py
+│       └── llm_judge.py
 ├── tests
+│   ├── test_comorbidity.py
+│   ├── test_demographic_analysis.py
+│   ├── test_llm_judge.py
+│   └── test_run_llm_judge.py
 └── uv.lock
 
 ```
 
-Many of these files are standard, and others are less so. See below for some explanation of these files.
-
-To use this template, simply click the "Use this template" button above to create a new repository initialized
-from this repository; next, you will need to change the following aspects of the new repository:
-
-- Rename the `package_name` directory in `src/` to your desired package name.
-- Update the `pyproject.toml` file with your package name, author information, and other metadata.
-- Update the `README.md` file to point to the correct badge links for your new repository, then update the
-    rest of the file with information relevant to your project. You will want to find and replace both
-    `package_name` and `MHAL-template` with your new package / repository name.
-- Set-up trusted publishing on PyPI for your new package name pointing to the output repository.
-- Set-up appropriate tokens for CodeCov or other services (if necessary) within your repository.
-- Optionally, update the `LICENSE`, `CONTRIBUTING.md`, and `AGENTS.md` files with information relevant to
-    your project.
-- Update `AGENTS.md` with any project-specific conventions (e.g., domain-specific naming rules,
-    special test fixtures, or additional build steps). Update the `known-first-party` value in the
-    `[tool.ruff.lint.isort]` section of `pyproject.toml`.
-
 > [!WARNING]
-> Note there is no folder in this repository template for `data` -- this is because _you should not put data in your code repository_. Datasets (public or private) should be stored outside of the repository (even if your repository is private) to avoid risking leakage of sensitive data, unnecessary bloat in your code repository, and over specialization to a particular data resource. Similarly, API keys or other "Secrets" for your project should also not be committed to your `git` repository or pushed to GitHub. Note that this applies to the underlying `git` repository as well as the online `github` -- if something is in your `git` commit history, it can be found through the published repository even if it is not on the main branch; in the event that you accidentally commit data or a secret variable, you need to [purge](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository) that commit from your `git` history (and/or from your repository) in addition to any other steps you need to take depending on what was added to a repository and/or exposed.
+> Do not commit data or secrets to this repository. Datasets must be stored outside the repo; API
+> keys (e.g. `OPENAI_API_KEY`) must be passed via environment variables or a local `.env` file that
+> is listed in `.gitignore`.
 
 ## Documentation
 
@@ -159,30 +174,15 @@ Beyond the default packages, you may also want to use:
 
 ### Additional Files
 
-#### `README.md`
-
-This file contains the main documentation for your project, and should be kept up to date.
-
-#### `LICENSE`
-
-This file contains the license for your project. Often, [The MIT License](https://opensource.org/license/mit)
-is a good choice for research projects.
-
 #### `CONTRIBUTORS.md`
 
-This is the **source of truth** for build, test, code-style, and PR-workflow conventions. Both
-human contributors and AI agents (via `AGENTS.md`) are pointed at this file. The included guide in
-the template is a good starting point — keep it up to date as your project's conventions evolve.
+Source of truth for build, test, code-style, and PR-workflow conventions for both human contributors
+and AI agents. See [`CONTRIBUTORS.md`](CONTRIBUTORS.md) for day-to-day commands and PR workflow.
 
-#### `AGENTS.md` and `CLAUDE.md`
+#### `AGENTS.md` / `CLAUDE.md`
 
-`AGENTS.md` provides AI coding agents (Claude Code, Cursor, Copilot, Codex CLI, Gemini CLI, and
-others) with a short pointer to `CONTRIBUTORS.md` plus a handful of agent-specific reminders
-(use `gh` not the GitHub MCP, doctest namespace pre-population, TDD encouragement, what not to do).
-`CLAUDE.md` is a symlink to `AGENTS.md` so Claude Code picks up the same instructions via its
-native path. See the "AI-Assisted Development" section of [`CONTRIBUTORS.md`](CONTRIBUTORS.md) for
-one-time setup instructions covering Claude Code, the `gh` CLI, and recommended MCP servers for
-web search and library documentation.
+`AGENTS.md` provides AI coding agents with project conventions. `CLAUDE.md` is a symlink so Claude
+Code picks up the same instructions via its native path.
 
 ### Repository management
 
