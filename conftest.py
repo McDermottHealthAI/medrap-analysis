@@ -1,11 +1,17 @@
 """Test set-up and fixtures code."""
 
+import os
+import sys
 import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 import pytest
+
+if sys.platform == "darwin":
+    os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+    os.environ.setdefault("OMP_NUM_THREADS", "1")
 
 
 @pytest.fixture(scope="session", autouse=True)
