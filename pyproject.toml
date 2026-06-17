@@ -62,6 +62,12 @@ doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 Homepage = "https://github.com/McDermottHealthAI/medrap-analysis"
 Issues = "https://github.com/McDermottHealthAI/medrap-analysis/issues"
 
+[tool.deptry.per_rule_ignores]
+# torch, lightning, omegaconf, pandas, yaml (PyYAML) are pulled in
+# transitively through medrap and will always be present when this package
+# is installed; no need to re-declare them as direct deps.
+DEP003 = ["lightning", "omegaconf", "pandas", "torch", "yaml"]
+
 [tool.ruff] # Ruff configuration for linting and formatting
 target-version = "py312"
 line-length = 110
