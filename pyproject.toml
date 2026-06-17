@@ -18,6 +18,8 @@ classifiers = [
 ]
 dependencies = [
   "medrap @ git+https://github.com/McDermottHealthAI/MedRAP.git",
+  "datasets>=2.0",
+  "joblib>=1.3",
   "numpy>=1.26",
   "polars>=0.20",
   "scikit-learn>=1.5.0",
@@ -29,7 +31,7 @@ dev = [
   "shfmt-py==3.12.0.2",
 ]
 docs = []
-llm_judge = ["openai>=1.0.0", "tiktoken>=0.7.0", "xlsxwriter>=3.2", "openpyxl>=3.1"]
+llm_judge = ["openai>=1.0.0", "tiktoken>=0.7.0", "xlsxwriter>=3.2"]
 viz = ["matplotlib>=3.8", "umap-learn>=0.5"]
 
 [tool.setuptools_scm] # Required for setuptools-scm to work, even if empty
@@ -38,7 +40,7 @@ viz = ["matplotlib>=3.8", "umap-learn>=0.5"]
 default-groups = ["dev", "llm_judge", "viz"]
 
 [project.optional-dependencies]
-llm_judge = ["openai>=1.0.0", "tiktoken>=0.7.0", "xlsxwriter>=3.2", "openpyxl>=3.1"]
+llm_judge = ["openai>=1.0.0", "tiktoken>=0.7.0", "xlsxwriter>=3.2"]
 viz = ["matplotlib>=3.8", "umap-learn>=0.5"]
 
 [project.scripts] # Add any console scripts here
@@ -59,6 +61,12 @@ doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 [project.urls]
 Homepage = "https://github.com/McDermottHealthAI/medrap-analysis"
 Issues = "https://github.com/McDermottHealthAI/medrap-analysis/issues"
+
+[tool.deptry.per_rule_ignores]
+# torch, lightning, omegaconf, pandas, yaml (PyYAML) are pulled in
+# transitively through medrap and will always be present when this package
+# is installed; no need to re-declare them as direct deps.
+DEP003 = ["lightning", "omegaconf", "pandas", "torch", "yaml"]
 
 [tool.ruff] # Ruff configuration for linting and formatting
 target-version = "py312"
