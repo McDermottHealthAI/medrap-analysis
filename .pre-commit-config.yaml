@@ -90,7 +90,7 @@ repos:
     hooks:
       - id: deptry
         name: deptry
-        entry: uv run --with deptry==0.25.1 deptry src
+        entry: uv run --with deptry==0.25.1 deptry src scripts
         language: system
         pass_filenames: false
         always_run: true

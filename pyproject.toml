@@ -62,9 +62,6 @@ doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 Homepage = "https://github.com/McDermottHealthAI/medrap-analysis"
 Issues = "https://github.com/McDermottHealthAI/medrap-analysis/issues"
 
-[tool.deptry]
-extend_sources = ["scripts"] # scan scripts/ so lazy imports there count as "used"
-
 [tool.ruff] # Ruff configuration for linting and formatting
 target-version = "py312"
 line-length = 110
