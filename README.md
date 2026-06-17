@@ -80,6 +80,7 @@ pip install "medrap-analysis[llm_judge,viz] @ git+https://github.com/McDermottHe
 │   ├── test_comorbidity.py
 │   ├── test_demographic_analysis.py
 │   ├── test_llm_judge.py
+│   ├── test_run_extraction_pipeline.py
 │   └── test_run_llm_judge.py
 └── uv.lock
 

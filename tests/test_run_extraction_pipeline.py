@@ -23,6 +23,7 @@ def _write_config(run_dir: Path, payload: dict) -> None:
 
 
 def test_resolve_retrieval_db_from_config(tmp_path: Path) -> None:
+    """Dataset path is read from config.yaml when no CLI override is given."""
     run_dir = tmp_path / "run"
     _write_config(run_dir, {"retriever": {"dataset_path": "/foo/bar"}})
 
@@ -30,6 +31,7 @@ def test_resolve_retrieval_db_from_config(tmp_path: Path) -> None:
 
 
 def test_resolve_retrieval_db_override_wins(tmp_path: Path) -> None:
+    """CLI override takes precedence over the path stored in config.yaml."""
     run_dir = tmp_path / "run"
     _write_config(run_dir, {"retriever": {"dataset_path": "/from/config"}})
 
@@ -37,6 +39,7 @@ def test_resolve_retrieval_db_override_wins(tmp_path: Path) -> None:
 
 
 def test_resolve_retrieval_db_errors_when_missing(tmp_path: Path) -> None:
+    """ValueError is raised when no retrieval DB path can be resolved."""
     run_dir = tmp_path / "run"
     _write_config(run_dir, {"retriever": {"k": 4}})  # no dataset_path
 
